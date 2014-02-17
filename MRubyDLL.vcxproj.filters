@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="mruby\mrbgems\mruby-array-ext\src\array.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\array.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\backtrace.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\class.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\codegen.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\compar.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\crc.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\debug.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\dump.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\enum.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\error.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\etc.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-eval\src\eval.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-fiber\src\fiber.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\gc.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-sprintf\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-string-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-struct\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-hash-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-time\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-range-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-toplevel-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-fiber\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-random\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-enum-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-proc-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-bin-mruby\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-objectspace\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-print\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-numeric-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-object-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-array-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-math\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-symbol-ext\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-bin-mirb\gem_init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\hash.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-hash-ext\src\hash-ext.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\init.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\kernel.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-sprintf\src\kernel.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\load.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-math\src\math.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrblib\mrblib.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-objectspace\src\mruby_objectspace.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-exit\src\mruby-exit.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-random\src\mt19937ar.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\numeric.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-numeric-ext\src\numeric_ext.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-object-ext\src\object.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\object.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\pool.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\print.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-print\src\print.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\proc.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-proc-ext\src\proc.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-random\src\random.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-range-ext\src\range.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\range.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-sprintf\src\sprintf.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\state.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\string.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-string-ext\src\string.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-string-utf8\src\string.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-struct\src\struct.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-symbol-ext\src\symbol.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\symbol.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-time\src\time.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\variable.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\src\vm.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\src\y.tab.c">
+      <Filter>mruby</Filter>
+    </ClCompile>
+    <ClCompile Include="MRubyDLL.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Spinel.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mruby\mrbgems\mruby-random\src\mt19937ar.h">
+      <Filter>mruby</Filter>
+    </ClInclude>
+    <ClInclude Include="mruby\mrbgems\mruby-random\src\random.h">
+      <Filter>mruby</Filter>
+    </ClInclude>
+    <ClInclude Include="Spinel.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="mruby4vs\MRubyClass.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="mruby4vs\MRubyDLL.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="mruby">
+      <UniqueIdentifier>{d3eee06f-0c22-4072-8bd6-0bf13ddffaec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{c8fb09f3-6bc4-4daf-a889-75be4638fe6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{ebbfd479-ec17-4334-87c7-4be622a8a45a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

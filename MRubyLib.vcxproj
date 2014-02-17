@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D6EF47F5-EEA9-44F1-9BE8-8911C95DFD31}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>MRubyLib</RootNamespace>
+    <ProjectName>MRubyLib</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>mruby\include;mruby\src;mruby4vs;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)mruby4vs\</OutDir>
+    <IntDir>$(Configuration)_LIB\</IntDir>
+    <TargetName>libmrubyD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>mruby\include;mruby\src;mruby4vs;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)mruby4vs\</OutDir>
+    <IntDir>$(Configuration)_LIB\</IntDir>
+    <TargetName>libmruby</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>NO_GETTIMEOFDAY;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NO_GETTIMEOFDAY;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="mruby4vs\MRubyClass.h" />
+    <ClInclude Include="mruby4vs\MRubyLib.h" />
+    <ClInclude Include="Spinel.h" />
+    <ClInclude Include="mruby\mrbgems\mruby-random\src\mt19937ar.h" />
+    <ClInclude Include="mruby\mrbgems\mruby-random\src\random.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MRubyLib.cpp" />
+    <ClCompile Include="Spinel.cpp" />
+    <ClCompile Include="mruby\build\host\mrbgems\gem_init.c" />
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-array-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-array-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-array-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-bin-mirb\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-bin-mirb_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-bin-mirb_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-bin-mruby\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-bin-mruby_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-bin-mruby_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-enum-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-enum-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-enum-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-fiber\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-fiber_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-fiber_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-hash-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-hash-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-hash-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-math\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-math_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-math_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-numeric-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-numeric-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-numeric-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-object-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-object-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-object-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-objectspace\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-objectspace_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-objectspace_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-print\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-print_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-print_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-proc-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-proc-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-proc-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-random\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-random_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-random_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-range-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-range-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-range-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-sprintf\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-sprintf_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-sprintf_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-string-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-string-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-string-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-struct\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-struct_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-struct_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-symbol-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-symbol-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-symbol-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-time\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-time_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-time_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrbgems\mruby-toplevel-ext\gem_init.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-toplevel-ext_gem_init.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-toplevel-ext_gem_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\build\host\mrblib\mrblib.c" />
+    <ClCompile Include="mruby\build\host\src\y.tab.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-array-ext\src\array.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-array-ext.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-array-ext.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-eval\src\eval.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-exit\src\mruby-exit.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-fiber\src\fiber.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-hash-ext\src\hash-ext.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-math\src\math.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-numeric-ext\src\numeric_ext.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-object-ext\src\object.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-object-ext.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-object-ext.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-objectspace\src\mruby_objectspace.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-print\src\print.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-print.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-print.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-proc-ext\src\proc.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-proc-ext.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-proc-ext.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-random\src\mt19937ar.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-random\src\random.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-range-ext\src\range.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-range-ext.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-range-ext.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-sprintf\src\kernel.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-sprintf-kernel.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-sprintf-kernel.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-sprintf\src\sprintf.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-string-ext\src\string.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-string-ext.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-string-ext.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-string-utf8\src\string.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-string-utf8.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-string-utf8.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-struct\src\struct.c" />
+    <ClCompile Include="mruby\mrbgems\mruby-symbol-ext\src\symbol.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)mruby-symbol-ext.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)mruby-symbol-ext.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="mruby\mrbgems\mruby-time\src\time.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBMRUBY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="mruby\src\array.c" />
+    <ClCompile Include="mruby\src\backtrace.c" />
+    <ClCompile Include="mruby\src\class.c" />
+    <ClCompile Include="mruby\src\codegen.c" />
+    <ClCompile Include="mruby\src\compar.c" />
+    <ClCompile Include="mruby\src\crc.c" />
+    <ClCompile Include="mruby\src\debug.c" />
+    <ClCompile Include="mruby\src\dump.c" />
+    <ClCompile Include="mruby\src\enum.c" />
+    <ClCompile Include="mruby\src\error.c" />
+    <ClCompile Include="mruby\src\etc.c" />
+    <ClCompile Include="mruby\src\gc.c" />
+    <ClCompile Include="mruby\src\hash.c" />
+    <ClCompile Include="mruby\src\init.c" />
+    <ClCompile Include="mruby\src\kernel.c" />
+    <ClCompile Include="mruby\src\load.c" />
+    <ClCompile Include="mruby\src\numeric.c" />
+    <ClCompile Include="mruby\src\object.c" />
+    <ClCompile Include="mruby\src\pool.c" />
+    <ClCompile Include="mruby\src\print.c" />
+    <ClCompile Include="mruby\src\proc.c" />
+    <ClCompile Include="mruby\src\range.c" />
+    <ClCompile Include="mruby\src\state.c" />
+    <ClCompile Include="mruby\src\string.c" />
+    <ClCompile Include="mruby\src\symbol.c" />
+    <ClCompile Include="mruby\src\variable.c" />
+    <ClCompile Include="mruby\src\vm.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
