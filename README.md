@@ -24,16 +24,16 @@ mruby4VSはmruby v1.0.0 ( [http://forum.mruby.org/](http://forum.mruby.org/) )�
 
 + VC++ディレクトリのライブラリディレクトリにlibファイルのある場所を追加する。
 + MRubyクラスのインスタンスを取得する。
- + class MRuby *mruby = CreateMRuby();
+ + `class MRuby *mruby = CreateMRuby();`
 
 ####動的ライブラリ(DLL)
 
 + includeでDLL用ヘッダを読み込む。
- + #include "MRubyDLL.h"
+ + `#include "MRubyDLL.h"`
 + DLLを読み込む。
- + HMODULE hmruby = LoadLibrary( "mrubydll.dll" );
+ + `HMODULE hmruby = LoadLibrary( "mrubydll.dll" );`
 + MRubyクラスのインスタンスを取得する。
- + class MRuby* mruby = CreateMRuby( hmruby );
+ + `class MRuby* mruby = CreateMRuby( hmruby );`
 
 ###利用
 
