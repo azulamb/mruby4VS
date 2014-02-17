@@ -2,6 +2,7 @@
 #include <mruby.h>
 #include <mruby/compile.h>
 #include <mruby/irep.h>
+#include <mruby/array.h>
 #include "Spinel.h"
 
 // Spinel
@@ -246,3 +247,114 @@ struct mrb_value Spinel::fixnumValue(mrb_int i)
 {
   return mrb_fixnum_value(i);
 }
+
+// array.c
+
+#ifdef ENABLE_MRUBY_ARRAY
+
+void Spinel::aryModify(struct RArray* a)
+{
+  return mrb_ary_modify( mrb, a );
+}
+
+void Spinel::aryDecref(mrb_shared_array *shared)
+{
+  return mrb_ary_decref( mrb, shared );
+}
+
+struct mrb_value Spinel::aryNewCapa(mrb_int capa)
+{
+  return mrb_ary_new_capa( mrb, capa );
+}
+
+struct mrb_value Spinel::aryNew(void)
+{
+  return mrb_ary_new( mrb );
+}
+
+struct mrb_value Spinel::aryNewFromValues(mrb_int size, const struct mrb_value *vals)
+{
+  return mrb_ary_new_from_values( mrb, size, vals );
+}
+
+void Spinel::aryConcat(struct mrb_value self, struct mrb_value other)
+{
+  return mrb_ary_concat( mrb, self, other );
+}
+
+struct mrb_value Spinel::arySplat(struct mrb_value v)
+{
+  return mrb_ary_splat( mrb, v );
+}
+
+void Spinel::aryPush(struct mrb_value ary, struct mrb_value ele)
+{
+  return mrb_ary_push( mrb, ary, ele );
+}
+
+struct mrb_value Spinel::aryPop(struct mrb_value ary)
+{
+  return mrb_ary_pop( mrb, ary );
+}
+
+struct mrb_value Spinel::aryAget(struct mrb_value self)
+{
+  return mrb_ary_aget( mrb, self );
+}
+
+struct mrb_value Spinel::aryRef(struct mrb_value ary, mrb_int n)
+{
+  return mrb_ary_ref( mrb, ary, n );
+}
+
+void Spinel::arySet(struct mrb_value ary, mrb_int n, struct mrb_value val)
+{
+  return mrb_ary_set( mrb, ary, n, val );
+}
+
+mrb_int Spinel::aryLen(struct mrb_value ary)
+{
+  return mrb_ary_len( mrb, ary );
+}
+
+void Spinel::aryReplace(struct mrb_value a, struct mrb_value b)
+{
+  return mrb_ary_replace( mrb, a, b );
+}
+
+struct mrb_value Spinel::checkArrayType(struct mrb_value self)
+{
+  return mrb_check_array_type( mrb, self );
+}
+
+struct mrb_value Spinel::aryUnshift(struct mrb_value self, struct mrb_value item)
+{
+  return mrb_ary_unshift(mrb, self, item);
+}
+
+struct mrb_value Spinel::assocNew(struct mrb_value car, struct mrb_value cdr)
+{
+  return mrb_assoc_new( mrb, car, cdr );
+}
+
+struct mrb_value Spinel::aryEntry(struct mrb_value ary, mrb_int offset)
+{
+  return mrb_ary_entry( ary, offset );
+}
+
+struct mrb_value Spinel::aryShift(struct mrb_value self)
+{
+  return mrb_ary_shift( mrb, self );
+}
+
+struct mrb_value Spinel::aryClear(struct mrb_value self)
+{
+  return mrb_ary_clear( mrb, self );
+}
+
+struct mrb_value Spinel::aryJoin(struct mrb_value ary, struct mrb_value sep)
+{
+  return mrb_ary_join( mrb, ary, sep );
+}
+
+#endif

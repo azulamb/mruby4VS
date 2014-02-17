@@ -1,0 +1,13 @@
+*.o
+*.d
+*.a
+*.obj
+*.sdf
+*.suo
+*.mak
+*.exp
+*.log
+*.tlog
+*.ilk
+*.pdb
+*.idb
