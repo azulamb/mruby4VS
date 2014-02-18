@@ -7,12 +7,19 @@
 #include <stdint.h>
 #include "MRubyClass.h"
 
+#include <mruby.h>
+#include <mruby/irep.h>
+
 #ifdef __ENABLE_MRUBY_ARRAY
 #include <mruby/array.h>
 #endif
 
 #ifdef __ENABLE_MRUBY_CLASS
 #include <mruby/class.h>
+#endif
+
+#ifdef __ENABLE_MRUBY_COMPILE
+#include <mruby/compile.h>
 #endif
 
 #ifndef MRB_FUNCALL_ARGC_MAX
@@ -29,7 +36,7 @@ public:
   virtual ~Spinel(void);
 
   virtual struct mrb_state * get(void);
-  virtual struct mrb_value   loadFromFile(const char *filepath);
+  virtual struct mrb_value   load(const char *filepath);
 
   // mruby.h
   //typedef mrb_value(*mrb_func_t)(mrb_state *mrb, mrb_value);
@@ -71,11 +78,11 @@ public:
   virtual struct mrb_value   topSelf(void);
 
   // parse.y
-  virtual struct mrb_value   load(FILE *f);
-  virtual struct mrb_value   load(const char *s);
+  virtual struct mrb_value   loadFile(FILE *f);
+  virtual struct mrb_value   loadString(const char *s);
 
   // load.c
-  virtual struct mrb_value   load(const uint8_t *bin);
+  virtual struct mrb_value   loadIrep(const uint8_t *bin);
 
   // vm.c
   virtual struct mrb_value   run(struct RProc *proc, mrb_value self);
@@ -129,6 +136,31 @@ public:
   virtual        void        gcMarkMt(struct RClass *c);
   virtual        size_t      gcMarkMtSize(struct RClass *c);
   virtual        void        gcFreeMt(struct RClass *c);
+#endif
+
+#ifdef __ENABLE_MRUBY_COMPILE
+
+  // parser.y
+  virtual struct mrbc_context *     cContextNew(void);
+  virtual        void               cContextFree(struct mrbc_context *cxt);
+  virtual        const char *       cFilename(mrbc_context *c, const char *s);
+  virtual        void               cPartialHook(mrbc_context *c, int(*partial_hook)(struct mrb_parser_state*), void *data);
+  virtual struct mrb_parser_state * parserNew(void);
+  virtual        void               parserFree(struct mrb_parser_state *p);
+  virtual        void               parserParse(struct mrb_parser_state *p, struct mrbc_context *c);
+  virtual        void               parserSetFilename(struct mrb_parser_state *p, const char *f);
+  virtual        const char *       parserGetFilename(struct mrb_parser_state *p, uint16_t idx);
+  virtual struct mrb_parser_state*  parseString(const char *s, mrbc_context *c);
+  virtual struct mrb_parser_state*  parseNstring(const char *s, int len, mrbc_context *c);
+  virtual struct mrb_value          loadNstring(const char *s, int len);
+  virtual struct mrb_value          loadStringCxt(const char *s, mrbc_context *cxt);
+  virtual struct mrb_value          loadNstringCxt(const char *s, int len, mrbc_context *cxt);
+  virtual struct mrb_parser_state * parseFile(FILE *f, mrbc_context *c);
+  virtual struct mrb_value          loadFileCxt(FILE *f, mrbc_context *c);
+
+  // codegen.c
+  virtual struct RProc *            generateCode(struct mrb_parser_state *p);
+
 #endif
 
   /*

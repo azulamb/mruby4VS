@@ -1,5 +1,5 @@
 // DLL have bug.
-#define USEDLL
+//#define USEDLL
 
 #ifdef USEDLL
 #  include "MRubyDLL.h"
@@ -7,14 +7,13 @@
 #  include "MRubyLib.h"
 #endif
 
-int a = 10;
-
 int main( void )
 {
-
+  int a = 10;
 
   // Create mruby instance.
 #ifdef USEDLL
+  // Load DLL
 #  ifdef _DEBUG
   HMODULE hmruby = LoadLibrary("mruby4vs/mrubyD.dll");
 #  else
@@ -26,7 +25,7 @@ int main( void )
 #endif
 
   // load mruby file.
-  mruby->loadFromFile("test.rb");
+  mruby->load("test.rb");
 
   mrb_value val = mrb_fixnum_value(20);
   a = mrb_fixnum(mruby->funcall("test1"));

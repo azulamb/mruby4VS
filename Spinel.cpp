@@ -1,7 +1,4 @@
 #include <stdarg.h>
-#include <mruby.h>
-#include <mruby/compile.h>
-#include <mruby/irep.h>
 
 #include "Spinel.h"
 
@@ -21,7 +18,7 @@ struct mrb_state * Spinel::get(void)
   return mrb;
 }
 
-struct mrb_value Spinel::loadFromFile(const char *filepath)
+struct mrb_value Spinel::load(const char *filepath)
 {
   struct mrb_value ret = {};
   FILE *f;
@@ -29,7 +26,7 @@ struct mrb_value Spinel::loadFromFile(const char *filepath)
   {
     return ret;
   }
-  ret = load( f );
+  ret = loadFile( f );
   fclose( f );
   return ret;
 }
@@ -176,19 +173,19 @@ struct mrb_value Spinel::topSelf(void)
 
 // parse.y
 
-struct mrb_value Spinel::load(FILE *f)
+struct mrb_value Spinel::loadFile(FILE *f)
 {
   return mrb_load_file(mrb, f);
 }
 
-struct mrb_value Spinel::load(const char *s)
+struct mrb_value Spinel::loadString(const char *s)
 {
   return mrb_load_string(mrb, s);
 }
 
 // load.c
 
-struct mrb_value Spinel::load(const uint8_t *bin)
+struct mrb_value Spinel::loadIrep(const uint8_t *bin)
 {
   return mrb_load_irep(mrb, bin);
 }
@@ -449,6 +446,97 @@ size_t Spinel::gcMarkMtSize(struct RClass *c)
 void Spinel::gcFreeMt(struct RClass *c)
 {
   return mrb_gc_free_mt( mrb, c );
+}
+
+#endif
+
+#ifdef __ENABLE_MRUBY_COMPILE
+
+// parser.y
+struct mrbc_context * Spinel::cContextNew(void)
+{
+  return mrbc_context_new( mrb );
+}
+
+void Spinel::cContextFree(struct mrbc_context *cxt)
+{
+  return mrbc_context_free( mrb, cxt );
+}
+
+const char * Spinel::cFilename(mrbc_context *c, const char *s)
+{
+  return mrbc_filename( mrb, c, s );
+}
+
+void Spinel::cPartialHook(mrbc_context *c, int(*partial_hook)(struct mrb_parser_state*), void *data)
+{
+  return mrbc_partial_hook( mrb, c, partial_hook,data );
+}
+
+struct mrb_parser_state * Spinel::parserNew(void)
+{
+  return mrb_parser_new( mrb );
+}
+
+void Spinel::parserFree(struct mrb_parser_state *p)
+{
+  return mrb_parser_free( p );
+}
+
+void Spinel::parserParse(struct mrb_parser_state *p, struct mrbc_context *c)
+{
+  return mrb_parser_parse( p, c );
+}
+
+void Spinel::parserSetFilename(struct mrb_parser_state *p, const char *f)
+{
+  return mrb_parser_set_filename( p, f );
+}
+
+const char * Spinel::parserGetFilename(struct mrb_parser_state *p, uint16_t idx)
+{
+  return mrb_parser_get_filename( p, idx );
+}
+
+struct mrb_parser_state* Spinel::parseString(const char *s, mrbc_context *c)
+{
+  return mrb_parse_string( mrb, s, c );
+}
+
+struct mrb_parser_state* Spinel::parseNstring(const char *s, int len, mrbc_context *c)
+{
+  return mrb_parse_nstring( mrb, s, len, c );
+}
+
+struct mrb_value Spinel::loadNstring(const char *s, int len)
+{
+  return mrb_load_nstring( mrb, s, len );
+}
+
+struct mrb_value Spinel::loadStringCxt(const char *s, mrbc_context *cxt)
+{
+  return mrb_load_string_cxt( mrb, s, cxt );
+}
+
+struct mrb_value Spinel::loadNstringCxt(const char *s, int len, mrbc_context *cxt)
+{
+  return mrb_load_nstring_cxt( mrb, s, len, cxt );
+}
+
+struct mrb_parser_state * Spinel::parseFile(FILE *f, mrbc_context *c)
+{
+  return mrb_parse_file( mrb, f, c );
+}
+
+struct mrb_value Spinel::loadFileCxt(FILE *f, mrbc_context *c)
+{
+  return mrb_load_file_cxt( mrb, f, c );
+}
+
+// codegen.c
+struct RProc * Spinel::generateCode(struct mrb_parser_state *p)
+{
+  return mrb_generate_code( mrb, p );
 }
 
 #endif
