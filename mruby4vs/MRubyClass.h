@@ -11,9 +11,15 @@
 //#define __ENABLE_MRUBY_DATA
 //#define __ENABLE_MRUBY_DEBUG
 #define __ENABLE_MRUBY_DUMP
+//#define __ENABLE_MRUBY_GC
+#define __ENABLE_MRUBY_HASH
 
 #include "mruby.h"
 #include "mruby/value.h"
+
+#ifdef __ENABLE_MRUBY_GC
+#include "mruby/gc.h"
+#endif
 
 class MRuby
 {
@@ -145,6 +151,29 @@ public:
   virtual struct mrb_irep *         readIrepFile(FILE*fp) = 0;
   virtual struct mrb_value          loadIrepFile(FILE*fp) = 0;
   virtual struct mrb_value          loadIrepFileCxt(FILE*fp, mrbc_context *c) = 0;
+#endif
+
+#ifdef __ENABLE_MRUBY_GC
+  // symbol error
+  //virtual        void               objspaceEachObjects(each_object_callback* callback, void *data) = 0;
+  //virtual        void               freeContext(struct mrb_context *c) = 0;
+#endif
+
+#ifdef __ENABLE_MRUBY_HASH
+  virtual struct mrb_value          hashNewCapa(int capa) = 0;
+  virtual struct mrb_value          hashNew(void) = 0;
+  virtual        void               hashSet(mrb_value hash, mrb_value key, mrb_value val) = 0;
+  virtual struct mrb_value          hashGet(mrb_value hash, mrb_value key) = 0;
+  virtual struct mrb_value          hashFetch(mrb_value hash, mrb_value key, mrb_value def) = 0;
+  virtual struct mrb_value          hashDeleteKey(mrb_value hash, mrb_value key) = 0;
+  virtual struct mrb_value          hashKeys(mrb_value hash) = 0;
+  virtual struct mrb_value          checkHashType(mrb_value hash) = 0;
+  virtual struct mrb_value          hashEmptyP(mrb_value self) = 0;
+  virtual struct mrb_value          hashClear(mrb_value hash) = 0;
+  virtual struct kh_ht *            hashTbl(mrb_value hash) = 0;
+  virtual void                      gcMarkHash(struct RHash *hash) = 0;
+  virtual size_t                    gcMarkHashSize(struct RHash *hash) = 0;
+  virtual void                      gcFreeHash(struct RHash *hash) = 0;
 #endif
 
 };

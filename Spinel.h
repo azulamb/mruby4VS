@@ -34,6 +34,15 @@
 #include <mruby/dump.h>
 #endif
 
+#ifdef __ENABLE_MRUBY_GC
+#include <mruby/gc.h>
+#endif
+
+#ifdef __ENABLE_MRUBY_HASH
+#include <mruby/hash.h>
+#endif
+
+
 #ifndef MRB_FUNCALL_ARGC_MAX
 #  define MRB_FUNCALL_ARGC_MAX 16
 #endif
@@ -194,6 +203,29 @@ public:
   virtual struct mrb_irep *         readIrepFile(FILE*fp);
   virtual struct mrb_value          loadIrepFile(FILE*fp);
   virtual struct mrb_value          loadIrepFileCxt(FILE*fp, mrbc_context *c);
+#endif
+
+#ifdef __ENABLE_MRUBY_GC
+  //virtual        void               objspaceEachObjects(each_object_callback* callback, void *data);
+  //virtual        void               freeContext(struct mrb_context *c);
+#endif
+
+#ifdef __ENABLE_MRUBY_HASH
+  // hash.c
+  virtual struct mrb_value          hashNewCapa(int capa);
+  virtual struct mrb_value          hashNew(void);
+  virtual        void               hashSet(mrb_value hash, mrb_value key, mrb_value val);
+  virtual struct mrb_value          hashGet(mrb_value hash, mrb_value key);
+  virtual struct mrb_value          hashFetch(mrb_value hash, mrb_value key, mrb_value def);
+  virtual struct mrb_value          hashDeleteKey(mrb_value hash, mrb_value key);
+  virtual struct mrb_value          hashKeys(mrb_value hash);
+  virtual struct mrb_value          checkHashType(mrb_value hash);
+  virtual struct mrb_value          hashEmptyP(mrb_value self);
+  virtual struct mrb_value          hashClear(mrb_value hash);
+  virtual struct kh_ht *            hashTbl(mrb_value hash);
+  virtual void                      gcMarkHash(struct RHash *hash);
+  virtual size_t                    gcMarkHashSize(struct RHash *hash);
+  virtual void                      gcFreeHash(struct RHash *hash);
 #endif
 
   /*

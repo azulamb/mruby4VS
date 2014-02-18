@@ -573,3 +573,96 @@ struct mrb_value Spinel::loadIrepFileCxt(FILE*fp, mrbc_context *c)
 }
 
 #endif
+
+#ifdef __ENABLE_MRUBY_GC
+
+// gc.c
+
+void Spinel::objspaceEachObjects(each_object_callback* callback, void *data)
+{
+  return mrb_objspace_each_objects( mrb, callback, data );
+}
+
+void Spinel::freeContext(struct mrb_context *c)
+{
+  return mrb_free_context( mrb, c );
+}
+
+#endif
+
+#ifdef __ENABLE_MRUBY_HASH
+
+// hash.c
+
+struct mrb_value Spinel::hashNewCapa(int capa)
+{
+  return mrb_hash_new_capa( mrb, capa );
+}
+
+struct mrb_value Spinel::hashNew(void)
+{
+  return mrb_hash_new( mrb );
+}
+
+void Spinel::hashSet(mrb_value hash, mrb_value key, mrb_value val)
+{
+  return mrb_hash_set( mrb, hash, key, val );
+}
+
+struct mrb_value Spinel::hashGet(mrb_value hash, mrb_value key)
+{
+  return mrb_hash_get( mrb, hash, key );
+}
+
+struct mrb_value Spinel::hashFetch(mrb_value hash, mrb_value key, mrb_value def)
+{
+  return mrb_hash_fetch( mrb, hash, key, def );
+}
+
+struct mrb_value Spinel::hashDeleteKey(mrb_value hash, mrb_value key)
+{
+  return mrb_hash_delete_key( mrb, hash, key );
+}
+
+struct mrb_value Spinel::hashKeys(mrb_value hash)
+{
+  return mrb_hash_keys( mrb, hash );
+}
+
+struct mrb_value Spinel::checkHashType(mrb_value hash)
+{
+  return mrb_check_hash_type( mrb, hash );
+}
+
+struct mrb_value Spinel::hashEmptyP(mrb_value self)
+{
+  return mrb_hash_empty_p( mrb, self );
+}
+
+struct mrb_value Spinel::hashClear(mrb_value hash)
+{
+  return mrb_hash_clear( mrb, hash );
+}
+
+struct kh_ht * Spinel::hashTbl(mrb_value hash)
+{
+  return mrb_hash_tbl( mrb, hash );
+}
+
+void Spinel::gcMarkHash(struct RHash *hash)
+{
+  return mrb_gc_mark_hash( mrb, hash );
+}
+
+size_t Spinel::gcMarkHashSize(struct RHash *hash)
+{
+  return mrb_gc_mark_hash_size( mrb, hash );
+}
+
+void Spinel::gcFreeHash(struct RHash *hash)
+{
+  return mrb_gc_free_hash( mrb, hash );
+}
+
+#endif
+
