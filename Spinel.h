@@ -7,6 +7,14 @@
 #include <stdint.h>
 #include "MRubyClass.h"
 
+#ifdef __ENABLE_MRUBY_ARRAY
+#include <mruby/array.h>
+#endif
+
+#ifdef __ENABLE_MRUBY_CLASS
+#include <mruby/class.h>
+#endif
+
 #ifndef MRB_FUNCALL_ARGC_MAX
 #  define MRB_FUNCALL_ARGC_MAX 16
 #endif
@@ -21,6 +29,7 @@ public:
   virtual ~Spinel(void);
 
   virtual struct mrb_state * get(void);
+  virtual struct mrb_value   loadFromFile(const char *filepath);
 
   // mruby.h
   //typedef mrb_value(*mrb_func_t)(mrb_state *mrb, mrb_value);
@@ -80,7 +89,7 @@ public:
   virtual struct mrb_value   fixnumValue(mrb_int i);
 
   // array.c
-#ifdef ENABLE_MRUBY_ARRAY
+#ifdef __ENABLE_MRUBY_ARRAY
   virtual        void        aryModify(struct RArray* a);
   virtual        void        aryDecref(struct mrb_shared_array *shared);
   virtual struct mrb_value   aryNewCapa(mrb_int capa);
@@ -103,6 +112,25 @@ public:
   virtual struct mrb_value   aryClear(struct mrb_value self);
   virtual struct mrb_value   aryJoin(struct mrb_value ary, struct mrb_value sep); 
 #endif
+
+#ifdef __ENABLE_MRUBY_CLASS
+  virtual struct RClass *    defineClassId(mrb_sym name, struct RClass *super);
+  virtual struct RClass *    defineModuleId(mrb_sym name);
+  virtual struct RClass *    vmDefineClass(struct mrb_value outer, struct mrb_value super, mrb_sym id);
+  virtual struct RClass *    vmDefineModule(struct mrb_value outer, mrb_sym id);
+  virtual        void        defineMethodVm(struct RClass *c, mrb_sym name, struct mrb_value body);
+  virtual        void        defineMethodRaw(struct RClass *c, mrb_sym mid, struct RProc *p);
+  virtual        void        defineMethodId(struct RClass *c, mrb_sym mid, mrb_func_t func, mrb_aspec aspec);
+  virtual        void        aliasMethod(struct RClass *c, mrb_sym a, mrb_sym b);
+  virtual struct RClass *    classOuterModule(struct RClass *c);
+  virtual struct RProc *     methodSearchVm(struct RClass **cp, mrb_sym mid);
+  virtual struct RProc *     methodSearch(struct RClass* c, mrb_sym mid);
+  virtual struct RClass*     classReal(struct RClass* cl);
+  virtual        void        gcMarkMt(struct RClass *c);
+  virtual        size_t      gcMarkMtSize(struct RClass *c);
+  virtual        void        gcFreeMt(struct RClass *c);
+#endif
+
   /*
   struct RClass * mrb_define_class_under(mrb_state *mrb, struct RClass *outer, const char *name, struct RClass *super);
   struct RClass * mrb_define_module_under(mrb_state *mrb, struct RClass *outer, const char *name);

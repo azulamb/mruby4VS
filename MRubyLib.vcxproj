@@ -41,13 +41,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>mruby\include;mruby\src;mruby4vs;$(IncludePath)</IncludePath>
+    <IncludePath>mruby\src;mruby4vs;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)mruby4vs\</OutDir>
     <IntDir>$(Configuration)_LIB\</IntDir>
     <TargetName>libmrubyD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>mruby\include;mruby\src;mruby4vs;$(IncludePath)</IncludePath>
+    <IncludePath>mruby\src;mruby4vs;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)mruby4vs\</OutDir>
     <IntDir>$(Configuration)_LIB\</IntDir>
     <TargetName>libmruby</TargetName>

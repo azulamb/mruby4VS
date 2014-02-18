@@ -5,7 +5,8 @@
 #  define NO_GETTIMEOFDAY
 #endif
 
-#define ENABLE_MRUBY_ARRAY
+#define __ENABLE_MRUBY_ARRAY
+#define __ENABLE_MRUBY_CLASS
 
 #include "mruby.h"
 #include "mruby/value.h"
@@ -48,6 +49,8 @@ public:
   virtual struct mrb_value   load(const char *s) = 0;
   // ! Load bytecode.
   virtual struct mrb_value   load(const uint8_t *bin) = 0;
+  virtual struct mrb_value   loadFromFile( const char *filepath ) = 0;
+  // loadFromRiteFile
   virtual struct mrb_value   run(struct RProc *proc, mrb_value self) = 0;
   virtual struct mrb_value   funcall(mrb_value self, const char *name) = 0;
   virtual struct mrb_value   funcall(mrb_value self, const char *name, int argc, ...) = 0;
@@ -57,7 +60,7 @@ public:
   virtual        mrb_int     fixnum(struct mrb_value value) = 0;
   virtual struct mrb_value   fixnumValue(mrb_int i) = 0;
 
-#ifdef ENABLE_MRUBY_ARRAY
+#ifdef __ENABLE_MRUBY_ARRAY
   virtual        void        aryModify(struct RArray* a) = 0;
   virtual        void        aryDecref(struct mrb_shared_array *shared) = 0;
   virtual struct mrb_value   aryNewCapa(mrb_int capa) = 0;
@@ -80,6 +83,25 @@ public:
   virtual struct mrb_value   aryClear(struct mrb_value self) = 0;
   virtual struct mrb_value   aryJoin(struct mrb_value ary, struct mrb_value sep) = 0;
 #endif
+
+#ifdef __ENABLE_MRUBY_CLASS
+  virtual struct RClass *    defineClassId( mrb_sym name, struct RClass *super) = 0;
+  virtual struct RClass *    defineModuleId(mrb_sym name) = 0;
+  virtual struct RClass *    vmDefineClass(struct mrb_value outer, struct mrb_value super, mrb_sym id) = 0;
+  virtual struct RClass *    vmDefineModule(struct mrb_value outer, mrb_sym id) = 0;
+  virtual        void        defineMethodVm(struct RClass *c, mrb_sym name, struct mrb_value body) = 0;
+  virtual        void        defineMethodRaw(struct RClass *c, mrb_sym mid, struct RProc *p) = 0;
+  virtual        void        defineMethodId(struct RClass *c, mrb_sym mid, mrb_func_t func, mrb_aspec aspec) = 0;
+  virtual        void        aliasMethod(struct RClass *c, mrb_sym a, mrb_sym b) = 0;
+  virtual struct RClass *    classOuterModule(struct RClass *c) = 0;
+  virtual struct RProc *     methodSearchVm(struct RClass **cp, mrb_sym mid) = 0;
+  virtual struct RProc *     methodSearch(struct RClass* c, mrb_sym mid) = 0;
+  virtual struct RClass*     classReal(struct RClass* cl) = 0;
+  virtual        void        gcMarkMt(struct RClass *c) = 0;
+  virtual        size_t      gcMarkMtSize(struct RClass *c) = 0;
+  virtual        void        gcFreeMt(struct RClass *c) = 0;
+#endif
+
 
 };
 

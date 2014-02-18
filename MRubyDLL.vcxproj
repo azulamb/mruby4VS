@@ -42,7 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>mruby\include;mruby\src;mruby4vs;$(IncludePath)</IncludePath>
+    <IncludePath>mruby\src;mruby4vs;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)mruby4vs\</OutDir>
     <IntDir>$(Configuration)_DLL\</IntDir>
@@ -52,7 +52,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)mruby4vs\</OutDir>
     <IntDir>$(Configuration)_DLL\</IntDir>
-    <IncludePath>mruby\include;mruby\src;mruby4vs;$(IncludePath)</IncludePath>
+    <IncludePath>mruby\src;mruby4vs;$(IncludePath)</IncludePath>
     <TargetName>mruby</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

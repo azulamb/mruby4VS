@@ -2,7 +2,7 @@
 #include <mruby.h>
 #include <mruby/compile.h>
 #include <mruby/irep.h>
-#include <mruby/array.h>
+
 #include "Spinel.h"
 
 // Spinel
@@ -19,6 +19,19 @@ Spinel::~Spinel(void)
 struct mrb_state * Spinel::get(void)
 {
   return mrb;
+}
+
+struct mrb_value Spinel::loadFromFile(const char *filepath)
+{
+  struct mrb_value ret = {};
+  FILE *f;
+  if (fopen_s( &f, filepath, "r" ) != 0)
+  {
+    return ret;
+  }
+  ret = load( f );
+  fclose( f );
+  return ret;
 }
 
 // mruby.h
@@ -250,7 +263,7 @@ struct mrb_value Spinel::fixnumValue(mrb_int i)
 
 // array.c
 
-#ifdef ENABLE_MRUBY_ARRAY
+#ifdef __ENABLE_MRUBY_ARRAY
 
 void Spinel::aryModify(struct RArray* a)
 {
@@ -355,6 +368,87 @@ struct mrb_value Spinel::aryClear(struct mrb_value self)
 struct mrb_value Spinel::aryJoin(struct mrb_value ary, struct mrb_value sep)
 {
   return mrb_ary_join( mrb, ary, sep );
+}
+
+#endif
+
+// class.c
+
+#ifdef __ENABLE_MRUBY_CLASS
+
+struct RClass * Spinel::defineClassId(mrb_sym name, struct RClass *super)
+{
+  return mrb_define_class_id( mrb, name, super );
+}
+
+struct RClass * Spinel::defineModuleId(mrb_sym name)
+{
+  return mrb_define_module_id( mrb, name );
+}
+
+struct RClass * Spinel::vmDefineClass(struct mrb_value outer, struct mrb_value super, mrb_sym id)
+{
+  return mrb_vm_define_class( mrb, outer, super, id );
+}
+
+struct RClass * Spinel::vmDefineModule(struct mrb_value outer, mrb_sym id)
+{
+  return mrb_vm_define_module( mrb, outer, id );
+}
+
+void Spinel::defineMethodVm(struct RClass *c, mrb_sym name, struct mrb_value body)
+{
+  return mrb_define_method_vm( mrb, c, name, body );
+}
+
+void Spinel::defineMethodRaw(struct RClass *c, mrb_sym mid, struct RProc *p)
+{
+  return mrb_define_method_raw( mrb, c, mid, p );
+}
+
+void Spinel::defineMethodId(struct RClass *c, mrb_sym mid, mrb_func_t func, mrb_aspec aspec)
+{
+  return mrb_define_method_id( mrb, c, mid, func, aspec );
+}
+
+void Spinel::aliasMethod(struct RClass *c, mrb_sym a, mrb_sym b)
+{
+  return mrb_alias_method( mrb, c, a, b );
+}
+
+struct RClass * Spinel::classOuterModule(struct RClass *c)
+{
+  return mrb_class_outer_module( mrb, c );
+}
+
+struct RProc * Spinel::methodSearchVm(struct RClass **cp, mrb_sym mid)
+{
+  return mrb_method_search_vm( mrb, cp, mid );
+}
+
+struct RProc * Spinel::methodSearch(struct RClass* c, mrb_sym mid)
+{
+  return mrb_method_search( mrb, c, mid );
+}
+
+struct RClass* Spinel::classReal(struct RClass* cl)
+{
+  return mrb_class_real( cl );
+}
+
+void Spinel::gcMarkMt(struct RClass *c)
+{
+  return mrb_gc_mark_mt( mrb, c );
+}
+
+size_t Spinel::gcMarkMtSize(struct RClass *c)
+{
+  return mrb_gc_mark_mt_size( mrb, c );
+}
+
+void Spinel::gcFreeMt(struct RClass *c)
+{
+  return mrb_gc_free_mt( mrb, c );
 }
 
 #endif
