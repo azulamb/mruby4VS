@@ -540,3 +540,36 @@ struct RProc * Spinel::generateCode(struct mrb_parser_state *p)
 }
 
 #endif
+
+#ifdef __ENABLE_MRUBY_DUMP
+
+// dump.c
+
+int Spinel::dumpIrepBinary(mrb_irep *irep, int debug_info, FILE* fp)
+{
+  return mrb_dump_irep_binary( mrb, irep, debug_info, fp );
+}
+
+int Spinel::dumpIrepCfunc(mrb_irep *irep, int debug_info, FILE *fp, const char *initname)
+{
+  return mrb_dump_irep_cfunc( mrb,irep, debug_info, fp, initname );
+}
+
+// load.c
+
+struct mrb_irep * Spinel::readIrepFile(FILE*fp)
+{
+  return mrb_read_irep_file( mrb, fp );
+}
+
+struct mrb_value Spinel::loadIrepFile(FILE*fp)
+{
+  return mrb_load_irep_file( mrb, fp );
+}
+
+struct mrb_value Spinel::loadIrepFileCxt(FILE*fp, mrbc_context *c)
+{
+  return mrb_load_irep_file_cxt( mrb, fp, c );
+}
+
+#endif

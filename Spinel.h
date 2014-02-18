@@ -22,6 +22,18 @@
 #include <mruby/compile.h>
 #endif
 
+#ifdef __ENABLE_MRUBY_DATA
+#include <mruby/data.h>
+#endif
+
+#ifdef __ENABLE_MRUBY_DEBUG
+#include <mruby/debug.h>
+#endif
+
+#ifdef __ENABLE_MRUBY_DUMP
+#include <mruby/dump.h>
+#endif
+
 #ifndef MRB_FUNCALL_ARGC_MAX
 #  define MRB_FUNCALL_ARGC_MAX 16
 #endif
@@ -161,6 +173,27 @@ public:
   // codegen.c
   virtual struct RProc *            generateCode(struct mrb_parser_state *p);
 
+#endif
+
+#ifdef __ENABLE_MRUBY_DATA
+  // need include data.h
+  //struct RData *mrb_data_object_alloc(mrb_state *mrb, struct RClass* klass, void *datap, const mrb_data_type *type);
+  //void mrb_data_check_type(mrb_state *mrb, mrb_value, const mrb_data_type*);
+  //void *mrb_data_get_ptr(mrb_state *mrb, mrb_value, const mrb_data_type*);
+  //void *mrb_data_check_get_ptr(mrb_state *mrb, mrb_value, const mrb_data_type*);
+#endif
+
+#ifdef __ENABLE_MRUBY_DEBUG
+#endif
+
+#ifdef __ENABLE_MRUBY_DUMP
+  // dump.c
+  virtual        int                dumpIrepBinary(mrb_irep *irep, int debug_info, FILE* fp);
+  virtual        int                dumpIrepCfunc(mrb_irep *irep, int debug_info, FILE *fp, const char *initname);
+  // load.c
+  virtual struct mrb_irep *         readIrepFile(FILE*fp);
+  virtual struct mrb_value          loadIrepFile(FILE*fp);
+  virtual struct mrb_value          loadIrepFileCxt(FILE*fp, mrbc_context *c);
 #endif
 
   /*

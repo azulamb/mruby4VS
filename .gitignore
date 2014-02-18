@@ -3,6 +3,7 @@
 *.a
 *.obj
 *.sdf
+*.opensdf
 *.suo
 *.mak
 *.exp

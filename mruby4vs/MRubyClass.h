@@ -8,6 +8,9 @@
 #define __ENABLE_MRUBY_ARRAY
 #define __ENABLE_MRUBY_CLASS
 #define __ENABLE_MRUBY_COMPILE
+//#define __ENABLE_MRUBY_DATA
+//#define __ENABLE_MRUBY_DEBUG
+#define __ENABLE_MRUBY_DUMP
 
 #include "mruby.h"
 #include "mruby/value.h"
@@ -123,6 +126,25 @@ public:
   virtual struct mrb_value          loadFileCxt(FILE *f, mrbc_context *c) = 0;
   virtual struct RProc *            generateCode(struct mrb_parser_state *p) = 0;
 
+#endif
+
+#ifdef __ENABLE_MRUBY_DATA
+  // need include data.h
+  //struct RData *mrb_data_object_alloc(mrb_state *mrb, struct RClass* klass, void *datap, const mrb_data_type *type);
+  //void mrb_data_check_type(mrb_state *mrb, mrb_value, const mrb_data_type*);
+  //void *mrb_data_get_ptr(mrb_state *mrb, mrb_value, const mrb_data_type*);
+  //void *mrb_data_check_get_ptr(mrb_state *mrb, mrb_value, const mrb_data_type*);
+#endif
+
+#ifdef __ENABLE_MRUBY_DEBUG
+#endif
+
+#ifdef __ENABLE_MRUBY_DUMP
+  virtual        int                dumpIrepBinary(mrb_irep *irep, int debug_info, FILE* fp) = 0;
+  virtual        int                dumpIrepCfunc(mrb_irep *irep, int debug_info, FILE *fp, const char *initname) = 0;
+  virtual struct mrb_irep *         readIrepFile(FILE*fp) = 0;
+  virtual struct mrb_value          loadIrepFile(FILE*fp) = 0;
+  virtual struct mrb_value          loadIrepFileCxt(FILE*fp, mrbc_context *c) = 0;
 #endif
 
 };
