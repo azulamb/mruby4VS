@@ -541,6 +541,48 @@ RProc * Spinel::generateCode(mrb_parser_state *p)
 
 #endif
 
+#ifdef __ENABLE_MRUBY_DATA
+// etc.c
+RData * Spinel::dataObjectAlloc(RClass* klass, void *datap, const mrb_data_type *type)
+{
+  return mrb_data_object_alloc( mrb, klass, datap, type );
+}
+
+void Spinel::dataCheckType(mrb_value obj, const mrb_data_type *type)
+{
+  return mrb_data_check_type( mrb, obj, type );
+}
+
+void * Spinel::dataGetPtr(mrb_value obj, const mrb_data_type *type)
+{
+  return mrb_data_get_ptr( mrb, obj, type );
+}
+
+void * Spinel::dataCheckGetPtr(mrb_value obj, const mrb_data_type *type)
+{
+  return mrb_data_check_get_ptr( mrb, obj, type );
+}
+#endif
+
+#ifdef __ENABLE_MRUBY_DEBUG
+
+mrb_irep_debug_info_file * Spinel::debugInfoAppendFile(mrb_irep *irep, uint32_t start_pos, uint32_t end_pos)
+{
+  return mrb_debug_info_append_file( mrb, irep, start_pos, end_pos );
+}
+
+mrb_irep_debug_info * Spinel::debugInfoAlloc(mrb_irep *irep)
+{
+  return mrb_debug_info_alloc( mrb, irep );
+}
+
+void Spinel::debugInfoFree(mrb_irep_debug_info *d)
+{
+  return mrb_debug_info_free( mrb, d );
+}
+
+#endif
+
 #ifdef __ENABLE_MRUBY_DUMP
 
 // dump.c
@@ -576,16 +618,80 @@ mrb_value Spinel::loadIrepFileCxt(FILE*fp, mrbc_context *c)
 
 #ifdef __ENABLE_MRUBY_GC
 
+#define __SYMBOL_NOT_FOUND
+
+#ifdef __SYMBOL_NOT_FOUND
 // gc.c
+#include "mruby/proc.h"
+#include "mruby/range.h"
+#include "mruby/string.h"
+
+#ifndef MRB_HEAP_PAGE_SIZE
+#define MRB_HEAP_PAGE_SIZE 1024
+#endif
+struct free_obj {
+  MRB_OBJECT_HEADER;
+  struct RBasic *next;
+};
+typedef struct {
+  union {
+    struct free_obj free;
+    struct RBasic basic;
+    struct RObject object;
+    struct RClass klass;
+    struct RString string;
+    struct RArray array;
+    struct RHash hash;
+    struct RRange range;
+    struct RData data;
+    struct RProc proc;
+  } as;
+} RVALUE;
+struct heap_page {
+  struct RBasic *freelist;
+  struct heap_page *prev;
+  struct heap_page *next;
+  struct heap_page *free_next;
+  struct heap_page *free_prev;
+  mrb_bool old : 1;
+  RVALUE objects[MRB_HEAP_PAGE_SIZE];
+};
+#endif
 
 void Spinel::objspaceEachObjects(each_object_callback* callback, void *data)
 {
-  return mrb_objspace_each_objects(mrb, callback, data);
+#ifndef __SYMBOL_NOT_FOUND
+  mrb_objspace_each_objects(mrb, callback, data);
+#else
+  // symbol not found.
+  struct heap_page *page = mrb->heaps;
+
+  while (page != NULL) {
+    RVALUE *p, *pend;
+
+    p = page->objects;
+    pend = p + MRB_HEAP_PAGE_SIZE;
+    for (; p < pend; p++) {
+      (*callback)(mrb, &p->as.basic, data);
+    }
+
+    page = page->next;
+  }
+#endif
 }
 
 void Spinel::freeContext(mrb_context *c)
 {
-  return mrb_free_context( mrb, c );
+#ifndef __SYMBOL_NOT_FOUND
+  mrb_free_context( mrb, c );
+#else
+  if (!c) return;
+  mrb_free(mrb, c->stbase);
+  mrb_free(mrb, c->cibase);
+  mrb_free(mrb, c->rescue);
+  mrb_free(mrb, c->ensure);
+  mrb_free(mrb, c);
+#endif
 }
 
 #endif
@@ -696,3 +802,252 @@ void Spinel::irepDecref(mrb_irep *irep)
 }
 
 #endif
+
+#ifdef __ENABLE_MRUBY_NUMERIC
+
+mrb_value Spinel::floToFixnum(mrb_value val)
+{
+  return mrb_flo_to_fixnum( mrb, val );
+}
+
+mrb_value Spinel::floToStr(mrb_value flo, int max_digit)
+{
+  return mrb_flo_to_str( mrb, flo, max_digit );
+}
+
+mrb_value Spinel::fixnumToStr(mrb_value x, int base)
+{
+  return mrb_fixnum_to_str( mrb, x, base );
+}
+
+mrb_value Spinel::fixnumPlus(mrb_value x, mrb_value y)
+{
+  return mrb_fixnum_plus( mrb, x, y );
+}
+
+mrb_value Spinel::fixnumMinus(mrb_value x, mrb_value y)
+{
+  return mrb_fixnum_minus( mrb, x, y );
+}
+
+mrb_value Spinel::fixnumMul(mrb_value x, mrb_value y)
+{
+  return mrb_fixnum_mul( mrb, x, y );
+}
+
+mrb_value Spinel::numDiv(mrb_value x, mrb_value y)
+{
+  return mrb_num_div( mrb, x, y );
+}
+#endif
+
+#ifdef __ENABLE_MRUBY_PROC
+
+// proc.c
+
+struct RProc * Spinel::procNew(mrb_irep *irep)
+{
+  return mrb_proc_new( mrb, irep );
+}
+
+struct RProc * Spinel::procNewCfunc(mrb_func_t func)
+{
+  return mrb_proc_new_cfunc( mrb, func );
+}
+
+struct RProc * Spinel::closureNew(mrb_irep *irep)
+{
+  return mrb_closure_new( mrb, irep );
+}
+
+struct RProc * Spinel::closureNewCfunc(mrb_func_t func, int nlocals)
+{
+  return mrb_closure_new_cfunc( mrb, func, nlocals );
+}
+
+void Spinel::procCopy(struct RProc *a, struct RProc *b)
+{
+  return mrb_proc_copy( a, b );
+}
+
+#endif
+
+#ifdef __ENABLE_MRUBY_RANGE
+
+mrb_value Spinel::rangeNew(mrb_value beg, mrb_value end, int excl)
+{
+  return mrb_range_new( mrb, beg, end, excl );
+}
+
+mrb_int Spinel::rangeBegLen(mrb_value range, mrb_int *begp, mrb_int *lenp, mrb_int len)
+{
+  return mrb_range_beg_len( mrb, range, begp, lenp, len );
+}
+
+#endif
+
+#ifdef __ENABLE_MRUBY_STRING
+
+void Spinel::gcFreeStr(struct RString *str)
+{
+  return mrb_gc_free_str( mrb, str );
+}
+
+void Spinel::strModify(struct RString *s)
+{
+  return mrb_str_modify( mrb, s );
+}
+
+//mrb_value Spinel::strLiteral(mrb_value s){return mrb_str_literal( mrb, s );}
+
+void Spinel::strConcat(mrb_value self, mrb_value other)
+{
+  return mrb_str_concat( mrb, self, other );
+}
+
+mrb_value Spinel::strPlus(mrb_value a, mrb_value b)
+{
+  return mrb_str_plus( mrb, a, b );
+}
+
+mrb_value Spinel::ptrToStr(void *p)
+{
+  return mrb_ptr_to_str( mrb, p );
+}
+
+mrb_value Spinel::objAsString(mrb_value obj)
+{
+  return mrb_obj_as_string( mrb, obj );
+}
+
+mrb_value Spinel::strResize(mrb_value str, mrb_int len)
+{
+  return mrb_str_resize( mrb, str, len );
+}
+
+mrb_value Spinel::strSubstr(mrb_value str, mrb_int beg, mrb_int len)
+{
+  return mrb_str_substr( mrb, str, beg, len );
+}
+
+mrb_value Spinel::stringType(mrb_value str)
+{
+  return mrb_string_type( mrb, str );
+}
+
+mrb_value Spinel::checkString_type(mrb_value str)
+{
+  return mrb_check_string_type( mrb, str );
+}
+
+mrb_value Spinel::strBufNew(mrb_int capa)
+{
+  return mrb_str_buf_new( mrb, capa );
+}
+
+mrb_value Spinel::strBufCat(mrb_value str, const char *ptr, size_t len)
+{
+  return mrb_str_buf_cat( mrb, str, ptr, len );
+}
+
+char * Spinel::stringValueCstr(mrb_value *ptr)
+{
+  return mrb_string_value_cstr( mrb, ptr );
+}
+
+char * Spinel::stringValuePtr(mrb_value ptr)
+{
+  return mrb_string_value_ptr( mrb, ptr );
+}
+
+int Spinel::strOffset(mrb_value str, int pos)
+{
+  return mrb_str_offset( mrb, str, pos );
+}
+
+mrb_value Spinel::strDup(mrb_value str)
+{
+  return mrb_str_dup( mrb, str );
+}
+
+mrb_value Spinel::strIntern(mrb_value self)
+{
+  return mrb_str_intern( mrb, self );
+}
+
+mrb_value Spinel::strCatCstr(mrb_value str, const char *ptr)
+{
+  return mrb_str_cat_cstr( mrb, str, ptr );
+}
+
+mrb_value Spinel::strToInum(mrb_value str, int base, int badcheck)
+{
+  return mrb_str_to_inum( mrb, str, base, badcheck );
+}
+
+double Spinel::strToDbl(mrb_value str, int badcheck)
+{
+  return mrb_str_to_dbl( mrb, str, badcheck );
+}
+
+mrb_value Spinel::strToStr(mrb_value str)
+{
+  return mrb_str_to_str( mrb, str );
+}
+
+mrb_int Spinel::strHash(mrb_value str)
+{
+  return mrb_str_hash( mrb, str );
+}
+
+mrb_value Spinel::strBufAppend(mrb_value str, mrb_value str2)
+{
+  return mrb_str_buf_append( mrb, str, str2 );
+}
+
+mrb_value Spinel::strInspect(mrb_value str)
+{
+  return mrb_str_inspect( mrb, str );
+}
+
+mrb_bool Spinel::strEqual(mrb_value str1, mrb_value str2)
+{
+  return mrb_str_equal( mrb, str1, str2 );
+}
+
+mrb_value Spinel::strDump(mrb_value str)
+{
+  return mrb_str_dump( mrb, str );
+}
+
+mrb_value Spinel::strCat(mrb_value str, const char *ptr, size_t len)
+{
+  return mrb_str_cat( mrb, str, ptr, len );
+}
+
+mrb_value Spinel::strAppend(mrb_value str, mrb_value str2)
+{
+  return mrb_str_append( mrb, str, str2 );
+}
+
+int Spinel::strCmp(mrb_value str1, mrb_value str2)
+{
+  return mrb_str_cmp( mrb, str1, str2 );
+}
+
+char * Spinel::strToCstr(mrb_value str)
+{
+  return mrb_str_to_cstr( mrb, str );
+}
+
+mrb_value Spinel::strPool(mrb_value str)
+{
+  return mrb_str_pool( mrb, str );
+}
+
+mrb_value Spinel::strCat2(mrb_value str, const char *ptr)
+{
+  return mrb_str_cat_cstr( mrb, str, ptr );
+}
+#endif
+
