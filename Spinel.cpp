@@ -12,6 +12,7 @@ Spinel::Spinel( void )
 
 Spinel::~Spinel( void )
 {
+  close();
 }
 
 mrb_state * Spinel::get( void )
@@ -165,6 +166,11 @@ mrb_value Spinel::checkToInteger( mrb_value val, const char *method )
 mrb_state* Spinel::open( void )
 {
   return mrb_open();
+}
+
+void Spinel::close( void )
+{
+  mrb_close( mrb );
 }
 
 mrb_value Spinel::topSelf( void )

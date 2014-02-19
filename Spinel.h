@@ -1,5 +1,5 @@
 #ifndef __SPINEL_VER
-#define __SPINEL_VER "0.9.0"
+#define __SPINEL_VER "1.0.0"
 
 //TODO: memory leak
 
@@ -68,6 +68,7 @@ public:
 
   // state.c
   virtual mrb_state * open( void );
+  virtual void        close( void );
   virtual mrb_value   topSelf( void );
 
   // parse.y

@@ -129,6 +129,7 @@ public:
   virtual void        defineConst( RClass *mod, const char *name, mrb_value v ) = 0;
   virtual mrb_value   checkToInteger( mrb_value val, const char *method ) = 0;
   virtual mrb_state * open( void ) = 0;
+  virtual void        close( void ) = 0;
   virtual mrb_value   topSelf( void ) = 0;
   // ! Use loadFromFile if you use DLL.
   virtual mrb_value   loadFile( FILE *f ) = 0;
