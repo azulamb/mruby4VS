@@ -19,7 +19,7 @@ int main( void )
 #  else
   HMODULE hmruby = LoadLibrary("mruby4vs/mruby.dll");
 #  endif
-  class MRuby* mruby = CreateMRuby(hmruby);
+  class MRuby *mruby = CreateMRuby(hmruby);
 #else
   class MRuby *mruby = CreateMRuby();
 #endif
