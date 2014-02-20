@@ -30,6 +30,14 @@ public:
 
   virtual mrb_state * get( void );
   virtual mrb_value   load( const char *filepath );
+  virtual mrb_int     funcallInt( mrb_value self, const char *name );
+  virtual mrb_int     funcallInt( mrb_value self, const char *name, int argc, ... );
+  virtual mrb_int     funcallInt( const char *name );
+  virtual mrb_int     funcallInt( const char *name, int argc, ... );
+  virtual mrb_float   funcallFloat( mrb_value self, const char *name );
+  virtual mrb_float   funcallFloat( mrb_value self, const char *name, int argc, ... );
+  virtual mrb_float   funcallFloat( const char *name );
+  virtual mrb_float   funcallFloat( const char *name, int argc, ... );
 
   // mruby.h
   //typedef mrb_value(*mrb_func_t)(mrb_state *mrb, mrb_value);

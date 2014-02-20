@@ -101,6 +101,15 @@ public:
 
   virtual mrb_state * get( void ) = 0;
   virtual mrb_value   load( const char *filepath ) = 0;
+  virtual mrb_int     funcallInt( mrb_value self, const char *name ) = 0;
+  virtual mrb_int     funcallInt( mrb_value self, const char *name, int argc, ... ) = 0;
+  virtual mrb_int     funcallInt( const char *name ) = 0;
+  virtual mrb_int     funcallInt( const char *name, int argc, ... ) = 0;
+  virtual mrb_float   funcallFloat( mrb_value self, const char *name ) = 0;
+  virtual mrb_float   funcallFloat( mrb_value self, const char *name, int argc, ... ) = 0;
+  virtual mrb_float   funcallFloat( const char *name ) = 0;
+  virtual mrb_float   funcallFloat( const char *name, int argc, ... ) = 0;
+  
 
   // Wrapper
 

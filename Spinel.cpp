@@ -5,6 +5,23 @@
 #include "mruby/irep.h"
 // Spinel
 
+#define SPINEL_FUNCALL(conv, self, name, argc) \
+  va_list ap;\
+  int i;\
+  if ( argc )\
+  {\
+    va_start( ap, argc ); \
+    for ( i = 0; i < argc; i++ )\
+    {\
+      argv[ i ] = va_arg( ap, mrb_value ); \
+    }\
+    va_end( ap ); \
+  }\
+  return conv( mrb_funcall( mrb, self, name, argc,\
+    argv[ 0 ], argv[ 1 ], argv[ 2 ], argv[ 3 ], argv[ 4 ], argv[ 5 ], argv[ 6 ], argv[ 7 ],\
+    argv[ 8 ], argv[ 9 ], argv[ 10 ], argv[ 11 ], argv[ 12 ], argv[ 13 ], argv[ 14 ], argv[ 15 ] ) );
+
+
 Spinel::Spinel( void )
 {
   mrb = open();
@@ -31,6 +48,46 @@ mrb_value Spinel::load( const char *filepath )
   ret = loadFile( f );
   fclose( f );
   return ret;
+}
+
+mrb_int Spinel::funcallInt( mrb_value self, const char *name )
+{
+  return mrb_fixnum( mrb_funcall( mrb, self, name, 0 ) );
+}
+
+mrb_int Spinel::funcallInt( mrb_value self, const char *name, int argc, ... )
+{
+  SPINEL_FUNCALL( mrb_fixnum, self, name, argc );
+}
+
+mrb_int Spinel::funcallInt( const char *name )
+{
+  return mrb_fixnum( mrb_funcall( mrb, topSelf(), name, 0 ) );
+}
+
+mrb_int Spinel::funcallInt( const char *name, int argc, ... )
+{
+  SPINEL_FUNCALL( mrb_fixnum, topSelf(), name, argc );
+}
+
+mrb_float Spinel::funcallFloat( mrb_value self, const char *name )
+{
+  return mrb_float( mrb_funcall( mrb, self, name, 0 ) );
+}
+
+mrb_float Spinel::funcallFloat( mrb_value self, const char *name, int argc, ... )
+{
+  SPINEL_FUNCALL( mrb_float, self, name, argc );
+}
+
+mrb_float Spinel::funcallFloat( const char *name )
+{
+  return mrb_float( mrb_funcall( mrb, topSelf(), name, 0 ) );
+}
+
+mrb_float Spinel::funcallFloat( const char *name, int argc, ... )
+{
+  SPINEL_FUNCALL( mrb_float, topSelf( ), name, argc );
 }
 
 // mruby.h
@@ -211,22 +268,7 @@ mrb_value Spinel::funcall( mrb_value self, const char *name )
 
 mrb_value Spinel::funcall( mrb_value self, const char *name, int argc, ... )
 {
-  va_list ap;
-  int i;
-
-  if ( argc )
-  {
-    va_start( ap, argc );
-    for ( i = 0; i < argc; i++ )
-    {
-      argv[ i ] = va_arg( ap, mrb_value );
-    }
-    va_end( ap );
-  }
-
-  return mrb_funcall( mrb, self, name, argc,
-    argv[ 0 ], argv[ 1 ], argv[ 2 ], argv[ 3 ], argv[ 4 ], argv[ 5 ], argv[ 6 ], argv[ 7 ],
-    argv[ 8 ], argv[ 9 ], argv[ 10 ], argv[ 11 ], argv[ 12 ], argv[ 13 ], argv[ 14 ], argv[ 15 ] );
+  SPINEL_FUNCALL( , self, name, argc );
 }
 
 mrb_value Spinel::funcall( const char *name )
@@ -236,21 +278,7 @@ mrb_value Spinel::funcall( const char *name )
 
 mrb_value Spinel::funcall( const char *name, int argc, ... )
 {
-  va_list ap;
-  int i;
-
-  if ( argc )
-  {
-    va_start( ap, argc );
-    for ( i = 0; i < argc; i++ )
-    {
-      argv[ i ] = va_arg( ap, mrb_value );
-    }
-    va_end( ap );
-  }
-  return mrb_funcall( mrb, topSelf(), name, argc,
-    argv[ 0 ], argv[ 1 ], argv[ 2 ], argv[ 3 ], argv[ 4 ], argv[ 5 ], argv[ 6 ], argv[ 7 ],
-    argv[ 8 ], argv[ 9 ], argv[ 10 ], argv[ 11 ], argv[ 12 ], argv[ 13 ], argv[ 14 ], argv[ 15 ] );
+  SPINEL_FUNCALL( , topSelf( ), name, argc );
 }
 
 // value.h
