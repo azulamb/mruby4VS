@@ -29,6 +29,10 @@ public:
   virtual ~Spinel( void );
 
   virtual mrb_state * get( void );
+  virtual int         getArgCount( void );
+  virtual int         getArgs( const char *format, ... );
+  virtual RClass *    getObjectClass( void );
+  virtual RClass *    defineClassUnder( RClass *outer, const char *name );
   virtual mrb_value   load( const char *filepath );
   virtual mrb_int     funcallInt( mrb_value self, const char *name );
   virtual mrb_int     funcallInt( mrb_value self, const char *name, int argc, ... );
@@ -196,6 +200,7 @@ public:
 #ifdef __ENABLE_MRUBY_DATA
   // etc.c
   virtual RData * dataObjectAlloc( RClass* klass, void *datap, const mrb_data_type *type );
+  virtual RData * dataWrapStruct( RClass* klass, const mrb_data_type *type, void *ptr );
   virtual void    dataCheckType( mrb_value obj, const mrb_data_type *type );
   virtual void *  dataGetPtr( mrb_value obj, const mrb_data_type *type );
   virtual void *  dataCheckGetPtr( mrb_value obj, const mrb_data_type *type );

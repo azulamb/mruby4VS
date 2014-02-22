@@ -37,6 +37,336 @@ mrb_state * Spinel::get( void )
   return mrb;
 }
 
+int Spinel::getArgCount( void )
+{
+  return mrb->c->ci->argc;
+}
+
+// in class.c
+static mrb_value check_type( mrb_state *mrb, mrb_value val, enum mrb_vtype t, const char *c, const char *m )
+{
+  mrb_value tmp;
+
+  tmp = mrb_check_convert_type( mrb, val, t, c, m );
+  if ( mrb_nil_p( tmp ) ) {
+    mrb_raisef( mrb, E_TYPE_ERROR, "expected %S", mrb_str_new_cstr( mrb, c ) );
+  }
+  return tmp;
+}
+static mrb_value to_str( mrb_state *mrb, mrb_value val ){ return check_type( mrb, val, MRB_TT_STRING, "String", "to_str" ); }
+static mrb_value to_ary( mrb_state *mrb, mrb_value val ){ return check_type( mrb, val, MRB_TT_ARRAY, "Array", "to_ary" ); }
+static mrb_value to_hash( mrb_state *mrb, mrb_value val ){ return check_type( mrb, val, MRB_TT_HASH, "Hash", "to_hash" ); }
+
+// copy by mrb_get_args in class.c
+int Spinel::getArgs( const char *format, ... )
+{
+  char c;
+  int i = 0;
+  mrb_value *sp = mrb->c->stack + 1;
+  va_list ap;
+  int argc = mrb->c->ci->argc;
+  int opt = 0;
+
+  va_start( ap, format );
+  if ( argc < 0 ) {
+    struct RArray *a = mrb_ary_ptr( mrb->c->stack[ 1 ] );
+
+    argc = a->len;
+    sp = a->ptr;
+  }
+  while ( ( c = *format++ ) ) {
+    switch ( c ) {
+    case '|': case '*': case '&':
+      break;
+    default:
+      if ( argc <= i && !opt ) {
+        mrb_raise( mrb, E_ARGUMENT_ERROR, "wrong number of arguments" );
+      }
+      break;
+    }
+
+    switch ( c ) {
+    case 'o':
+    {
+      mrb_value *p;
+
+      p = va_arg( ap, mrb_value* );
+      if ( i < argc ) {
+        *p = *sp++;
+        i++;
+      }
+    }
+      break;
+    case 'C':
+    {
+      mrb_value *p;
+
+      p = va_arg( ap, mrb_value* );
+      if ( i < argc ) {
+        mrb_value ss;
+
+        ss = *sp++;
+        switch ( mrb_type( ss ) ) {
+        case MRB_TT_CLASS:
+        case MRB_TT_MODULE:
+        case MRB_TT_SCLASS:
+          break;
+        default:
+          mrb_raisef( mrb, E_TYPE_ERROR, "%S is not class/module", ss );
+          break;
+        }
+        *p = ss;
+        i++;
+      }
+    }
+      break;
+    case 'S':
+    {
+      mrb_value *p;
+
+      p = va_arg( ap, mrb_value* );
+      if ( i < argc ) {
+        *p = to_str( mrb, *sp++ );
+        i++;
+      }
+    }
+      break;
+    case 'A':
+    {
+      mrb_value *p;
+
+      p = va_arg( ap, mrb_value* );
+      if ( i < argc ) {
+        *p = to_ary( mrb, *sp++ );
+        i++;
+      }
+    }
+      break;
+    case 'H':
+    {
+      mrb_value *p;
+
+      p = va_arg( ap, mrb_value* );
+      if ( i < argc ) {
+        *p = to_hash( mrb, *sp++ );
+        i++;
+      }
+    }
+      break;
+    case 's':
+    {
+      mrb_value ss;
+      struct RString *s;
+      char **ps = 0;
+      int *pl = 0;
+
+      ps = va_arg( ap, char** );
+      pl = va_arg( ap, int* );
+      if ( i < argc ) {
+        ss = to_str( mrb, *sp++ );
+        s = mrb_str_ptr( ss );
+        *ps = s->ptr;
+        *pl = s->len;
+        i++;
+      }
+    }
+      break;
+    case 'z':
+    {
+      mrb_value ss;
+      struct RString *s;
+      char **ps;
+      mrb_int len;
+
+      ps = va_arg( ap, char** );
+      if ( i < argc ) {
+        ss = to_str( mrb, *sp++ );
+        s = mrb_str_ptr( ss );
+        len = (mrb_int)strlen( s->ptr );
+        if ( len < s->len ) {
+          mrb_raise( mrb, E_ARGUMENT_ERROR, "string contains null byte" );
+        }
+        else if ( len > s->len ) {
+          mrb_str_modify( mrb, s );
+        }
+        *ps = s->ptr;
+        i++;
+      }
+    }
+      break;
+    case 'a':
+    {
+      mrb_value aa;
+      struct RArray *a;
+      mrb_value **pb;
+      mrb_int *pl;
+
+      pb = va_arg( ap, mrb_value** );
+      pl = va_arg( ap, mrb_int* );
+      if ( i < argc ) {
+        aa = to_ary( mrb, *sp++ );
+        a = mrb_ary_ptr( aa );
+        *pb = a->ptr;
+        *pl = a->len;
+        i++;
+      }
+    }
+      break;
+    case 'f':
+    {
+      mrb_float *p;
+
+      p = va_arg( ap, mrb_float* );
+      if ( i < argc ) {
+        switch ( mrb_type( *sp ) ) {
+        case MRB_TT_FLOAT:
+          *p = mrb_float( *sp );
+          break;
+        case MRB_TT_FIXNUM:
+          *p = (mrb_float)mrb_fixnum( *sp );
+          break;
+        case MRB_TT_STRING:
+          mrb_raise( mrb, E_TYPE_ERROR, "String can't be coerced into Float" );
+          break;
+        default:
+        {
+          mrb_value tmp;
+
+          tmp = mrb_convert_type( mrb, *sp, MRB_TT_FLOAT, "Float", "to_f" );
+          *p = mrb_float( tmp );
+        }
+          break;
+        }
+        sp++;
+        i++;
+      }
+    }
+      break;
+    case 'i':
+    {
+      mrb_int *p;
+
+      p = va_arg( ap, mrb_int* );
+      if ( i < argc ) {
+        switch ( mrb_type( *sp ) ) {
+        case MRB_TT_FIXNUM:
+          *p = mrb_fixnum( *sp );
+          break;
+        case MRB_TT_FLOAT:
+        {
+          mrb_float f = mrb_float( *sp );
+
+          if ( !FIXABLE( f ) ) {
+            mrb_raise( mrb, E_RANGE_ERROR, "float too big for int" );
+          }
+          *p = (mrb_int)f;
+        }
+          break;
+        default:
+          *p = mrb_fixnum( mrb_Integer( mrb, *sp ) );
+          break;
+        }
+        sp++;
+        i++;
+      }
+    }
+      break;
+    case 'b':
+    {
+      mrb_bool *boolp = va_arg( ap, mrb_bool* );
+
+      if ( i < argc ) {
+        mrb_value b = *sp++;
+        *boolp = mrb_test( b );
+        i++;
+      }
+    }
+      break;
+    case 'n':
+    {
+      mrb_sym *symp;
+
+      symp = va_arg( ap, mrb_sym* );
+      if ( i < argc ) {
+        mrb_value ss;
+
+        ss = *sp++;
+        if ( mrb_type( ss ) == MRB_TT_SYMBOL ) {
+          *symp = mrb_symbol( ss );
+        }
+        else if ( mrb_string_p( ss ) ) {
+          *symp = mrb_intern_str( mrb, to_str( mrb, ss ) );
+        }
+        else {
+          mrb_value obj = mrb_funcall( mrb, ss, "inspect", 0 );
+          mrb_raisef( mrb, E_TYPE_ERROR, "%S is not a symbol", obj );
+        }
+        i++;
+      }
+    }
+      break;
+
+    case '&':
+    {
+      mrb_value *p, *bp;
+
+      p = va_arg( ap, mrb_value* );
+      if ( mrb->c->ci->argc < 0 ) {
+        bp = mrb->c->stack + 2;
+      }
+      else {
+        bp = mrb->c->stack + mrb->c->ci->argc + 1;
+      }
+      *p = *bp;
+    }
+      break;
+    case '|':
+      opt = 1;
+      break;
+
+    case '*':
+    {
+      mrb_value **var;
+      int *pl;
+
+      var = va_arg( ap, mrb_value** );
+      pl = va_arg( ap, int* );
+      if ( argc > i ) {
+        *pl = argc - i;
+        if ( *pl > 0 ) {
+          *var = sp;
+        }
+        i = argc;
+        sp += *pl;
+      }
+      else {
+        *pl = 0;
+        *var = NULL;
+      }
+    }
+      break;
+    default:
+      mrb_raisef( mrb, E_ARGUMENT_ERROR, "invalid argument specifier %S", mrb_str_new( mrb, &c, 1 ) );
+      break;
+    }
+  }
+  if ( !c && argc > i ) {
+    mrb_raise( mrb, E_ARGUMENT_ERROR, "wrong number of arguments" );
+  }
+  va_end( ap );
+  return i;
+}
+
+RClass * Spinel::getObjectClass( void )
+{
+  return mrb->object_class;
+}
+
+RClass * Spinel::defineClassUnder( RClass *outer, const char *name )
+{
+  return mrb_define_class_under( mrb, outer, name, mrb->object_class );
+}
+
 mrb_value Spinel::load( const char *filepath )
 {
   mrb_value ret = {};
@@ -697,6 +1027,11 @@ RProc * Spinel::generateCode( mrb_parser_state *p )
 RData * Spinel::dataObjectAlloc( RClass* klass, void *datap, const mrb_data_type *type )
 {
   return mrb_data_object_alloc( mrb, klass, datap, type );
+}
+
+RData * Spinel::dataWrapStruct( RClass* klass, const mrb_data_type *type, void *ptr )
+{
+  return Data_Wrap_Struct( mrb, klass, type, ptr );
 }
 
 void Spinel::dataCheckType( mrb_value obj, const mrb_data_type *type )

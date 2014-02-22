@@ -100,6 +100,10 @@ public:
   // Original
 
   virtual mrb_state * get( void ) = 0;
+  virtual int         getArgCount( void ) = 0;
+  virtual int         getArgs( const char *format, ... ) = 0;
+  virtual RClass *    getObjectClass( void ) = 0;
+  virtual RClass *    defineClassUnder( RClass *outer, const char *name ) = 0;
   virtual mrb_value   load( const char *filepath ) = 0;
   virtual mrb_int     funcallInt( mrb_value self, const char *name ) = 0;
   virtual mrb_int     funcallInt( mrb_value self, const char *name, int argc, ... ) = 0;
@@ -135,6 +139,7 @@ public:
   virtual RClass *    moduleNew( void ) = 0;
   virtual mrb_bool    objRespondTo( RClass* c, mrb_sym mid ) = 0;
   virtual mrb_value   objDup( mrb_value obj ) = 0;
+  /* ! define const variable in module. */
   virtual void        defineConst( RClass *mod, const char *name, mrb_value v ) = 0;
   virtual mrb_value   checkToInteger( mrb_value val, const char *method ) = 0;
   virtual mrb_state * open( void ) = 0;
@@ -245,6 +250,7 @@ public:
 
 #ifdef __ENABLE_MRUBY_DATA
   virtual RData * dataObjectAlloc( RClass* klass, void *datap, const mrb_data_type *type ) = 0;
+  virtual RData * dataWrapStruct( RClass* klass, const mrb_data_type *type, void *ptr ) = 0;
   virtual void    dataCheckType( mrb_value obj, const mrb_data_type *type ) = 0;
   virtual void *  dataGetPtr( mrb_value obj, const mrb_data_type *type ) = 0;
   virtual void *  dataCheckGetPtr( mrb_value obj, const mrb_data_type *type ) = 0;
