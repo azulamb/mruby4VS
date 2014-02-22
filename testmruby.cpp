@@ -28,12 +28,15 @@ int main( void )
   mruby->load("test.rb");
 
   mrb_value val = mrb_fixnum_value(20);
-  a = mrb_fixnum(mruby->funcall("test1"));
+  a = mruby->funcallInt("test1");
   printf("%d\n", a); // 10
-  a = mrb_fixnum(mruby->funcall("test2", 1, val));
+  a = mruby->funcallInt("test2", 1, val);
   printf("%d\n", a); // 20 * 2 => 40
-  a = mrb_fixnum(mruby->funcall("test3", 2, val, mrb_fixnum_value(30)));
+  a = mruby->funcallInt("test3", 2, val, mrb_fixnum_value(30));
   printf("%d\n", a); // 20 + 30 => 50
 
   delete( mruby );
+#ifdef USEDLL
+  FreeLibrary( hmruby );
+#endif
 }
