@@ -1,5 +1,6 @@
 #ifndef __SPINEL_VER
 #define __SPINEL_VER "1.0.0"
+#define __SPINEL_VER_NUM 1
 
 //TODO: memory leak
 
@@ -28,12 +29,15 @@ public:
   Spinel( void );
   virtual ~Spinel( void );
 
+  virtual const char *getVersion( void );
+  virtual int getVersionNum( void );
+
   virtual mrb_state * get( void );
   virtual int         getArgCount( void );
   virtual int         getArgs( const char *format, ... );
   virtual RClass *    getObjectClass( void );
   virtual RClass *    defineClassUnder( RClass *outer, const char *name );
-  virtual mrb_value   load( const char *filepath );
+  virtual int         load( const char *filepath );
   virtual mrb_int     funcallInt( mrb_value self, const char *name );
   virtual mrb_int     funcallInt( mrb_value self, const char *name, int argc, ... );
   virtual mrb_int     funcallInt( const char *name );
@@ -55,7 +59,7 @@ public:
   virtual RClass *    defineModuleUnder( mrb_state *mrb, RClass *outer, const char *name );
   virtual void        defineMethod( RClass *c, const char *name, mrb_func_t func, mrb_aspec aspec );
   virtual RClass *    defineModule( const char *name );
-  virtual RClass *    defineClass( const char *name, RClass *super );
+  virtual RClass *    defineClass( const char *name, RClass *super = NULL );
   virtual mrb_value   singletonClass( mrb_value v );
   virtual void        includeModule( RClass *c, RClass *m );
   virtual void        defineClassMethod( RClass *c, const char *name, mrb_func_t func, mrb_aspec aspec );

@@ -5,6 +5,7 @@
 #include "mruby/irep.h"
 // Spinel
 
+// TODO: mrb_value mrb_funcall_argv( mrb_state *mrb, mrb_value self, mrb_sym mid, int argc, mrb_value *argv )
 #define SPINEL_FUNCALL(conv, self, name, argc) \
   va_list ap;\
   int i;\
@@ -30,6 +31,16 @@ Spinel::Spinel( void )
 Spinel::~Spinel( void )
 {
   close();
+}
+
+const char *Spinel::getVersion( void )
+{
+  return __SPINEL_VER;
+}
+
+int Spinel::getVersionNum( void )
+{
+  return __SPINEL_VER_NUM;
 }
 
 mrb_state * Spinel::get( void )
@@ -367,17 +378,22 @@ RClass * Spinel::defineClassUnder( RClass *outer, const char *name )
   return mrb_define_class_under( mrb, outer, name, mrb->object_class );
 }
 
-mrb_value Spinel::load( const char *filepath )
+int Spinel::load( const char *filepath )
 {
-  mrb_value ret = {};
   FILE *f;
   if ( fopen_s( &f, filepath, "r" ) != 0 )
   {
-    return ret;
+    return 1;
   }
-  ret = loadFile( f );
+  loadFile( f );
   fclose( f );
-  return ret;
+
+  if(mrb->exc)
+  {
+    return 2;
+  }
+
+  return 0;
 }
 
 mrb_int Spinel::funcallInt( mrb_value self, const char *name )

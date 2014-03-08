@@ -98,13 +98,39 @@ public:
   virtual ~MRuby( void ){}
 
   // Original
+  virtual const char *getVersion( void ) = 0;
+  virtual int getVersionNum( void ) = 0;
 
   virtual mrb_state * get( void ) = 0;
   virtual int         getArgCount( void ) = 0;
+  /* ! format
+string  mruby type     C type                 note
+----------------------------------------------------------------------------------------------
+o:      Object         [mrb_value]
+C:      class/module   [mrb_value]
+S:      String         [mrb_value]
+A:      Array          [mrb_value]
+H:      Hash           [mrb_value]
+s:      String         [char*,int]            Receive two arguments.
+z:      String         [char*]                NUL terminated string.
+a:      Array          [mrb_value*,mrb_int]   Receive two arguments.
+f:      Float          [mrb_float]
+i:      Integer        [mrb_int]
+b:      Boolean        [mrb_bool]
+n:      Symbol         [mrb_sym]
+&:      Block          [mrb_value]
+*:      rest argument  [mrb_value*,int]       Receive the rest of the arguments as an array.
+|:      optional                              Next argument of '|' and later are optional.
+  */
   virtual int         getArgs( const char *format, ... ) = 0;
   virtual RClass *    getObjectClass( void ) = 0;
   virtual RClass *    defineClassUnder( RClass *outer, const char *name ) = 0;
-  virtual mrb_value   load( const char *filepath ) = 0;
+  /* ! load mruby file.
+ret 0: No error
+    1: Open error.
+    2: Compile error.
+  */
+  virtual int         load( const char *filepath ) = 0;
   virtual mrb_int     funcallInt( mrb_value self, const char *name ) = 0;
   virtual mrb_int     funcallInt( mrb_value self, const char *name, int argc, ... ) = 0;
   virtual mrb_int     funcallInt( const char *name ) = 0;
